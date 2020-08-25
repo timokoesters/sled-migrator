@@ -78,16 +78,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "conduit-updater"
-version = "0.1.0"
-dependencies = [
- "sled 0.31.0",
- "sled 0.32.1",
- "sled 0.33.0",
- "sled 0.34.3",
-]
-
-[[package]]
 name = "crc32fast"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -355,6 +345,16 @@ dependencies = [
  "libc",
  "log",
  "parking_lot 0.11.0",
+]
+
+[[package]]
+name = "sled-migrator"
+version = "0.1.0"
+dependencies = [
+ "sled 0.31.0",
+ "sled 0.32.1",
+ "sled 0.33.0",
+ "sled 0.34.3",
 ]
 
 [[package]]
