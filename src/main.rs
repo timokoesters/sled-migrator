@@ -7,7 +7,7 @@ fn main() {
     let mut target = String::new();
 
     let args: BTreeMap<String, String> = env::args()
-        .filter(|arg| arg.starts_with("-"))
+        .filter(|arg| arg.starts_with("--"))
         .map(|arg| {
             arg.splitn(2, '=')
                 .map(ToString::to_string)
@@ -15,7 +15,7 @@ fn main() {
         })
         .fold(BTreeMap::new(), |mut map, arg| {
             if arg.len() != 2 {
-                panic!("Wrong argument! An argument must be of the format 'key=value'");
+                panic!("Wrong argument! An argument must be of the format '--key=value'");
             }
             map.insert(arg[0].trim_start_matches('-').to_owned(), arg[1].to_owned());
             map
