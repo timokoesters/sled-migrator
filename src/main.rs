@@ -1,25 +1,49 @@
-use std::io::{stdin, stdout, Write};
+use std::{env, io::{stdin, stdout, Write}};
+use std::collections::BTreeMap;
 
 fn main() {
     let mut input = String::new();
     let mut output = String::new();
     let mut target = String::new();
 
-    print!("Input path: ");
-    stdout().flush().unwrap();
-    stdin().read_line(&mut input).unwrap();
+    let args: BTreeMap<String, String> = env::args()
+        .filter(|arg| arg.starts_with("--"))
+        .map(|arg| {
+            arg.splitn(2, '=')
+                .map(ToString::to_string)
+                .collect::<Vec<_>>()
+        })
+        .fold(BTreeMap::new(), |mut map, arg| {
+            if arg.len() != 2 {
+                panic!("Wrong argument! An argument must be of the format '--key=value'");
+            }
+            map.insert(arg[0].trim_start_matches('-').to_owned(), arg[1].to_owned());
+            map
+        });
 
-    print!("Output path: ");
-    stdout().flush().unwrap();
-    stdin().read_line(&mut output).unwrap();
+    if let Some(input_path) = args.get("input") {
+        input = input_path.to_owned();
+    } else {
+        print!("Input path: ");
+        stdout().flush().unwrap();
+        stdin().read_line(&mut input).unwrap();
+    }
 
-    print!("Target sled version [0.34]: ");
-    stdout().flush().unwrap();
-    stdin().read_line(&mut target).unwrap();
+    if let Some(output_path) = args.get("output") {
+        output = output_path.to_owned();
+    } else {
+        print!("Output path: ");
+        stdout().flush().unwrap();
+        stdin().read_line(&mut output).unwrap();
+    }
 
-    input = input.trim().to_owned();
-    output = output.trim().to_owned();
-    target = target.trim().to_owned();
+    if let Some(target_version) = args.get("target") {
+        target = target_version.to_owned();
+    } else {
+        print!("Target sled version [0.34]: ");
+        stdout().flush().unwrap();
+        stdin().read_line(&mut target).unwrap();
+    }
 
     // Default target version
     if target.is_empty() {
@@ -28,7 +52,6 @@ fn main() {
 
     let data: Vec<_> = sled_0_31::Config::default()
         .path(input.clone())
-        .temporary(true)
         .open()
         .ok()
         .filter(|db| db.was_recovered())
