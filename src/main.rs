@@ -52,7 +52,6 @@ fn main() {
 
     let data: Vec<_> = sled_0_31::Config::default()
         .path(input.clone())
-        .temporary(true)
         .open()
         .ok()
         .filter(|db| db.was_recovered())

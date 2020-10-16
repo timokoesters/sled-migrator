@@ -34,7 +34,7 @@ COPY . .
 RUN if [[ $LOCAL == "true" ]]; then \
         cargo install --path . ; \
     else \
-        cargo install --git "https://github.com/Weasy666/sled-migrator.git" --rev ${GIT_REF}; \
+        cargo install --git "https://github.com/timokoesters/sled-migrator.git" --rev ${GIT_REF}; \
     fi
 
 ########################## RUNTIME IMAGE ##########################
@@ -76,7 +76,7 @@ RUN set -x ; \
     adduser -S -D -H -h /srv/conduit -G www-data -g www-data www-data 2>/dev/null ; \
     addgroup www-data www-data 2>/dev/null && exit 0 ; exit 1
 
-# Change ownership of Conduit files to www-data user and group
+# Change ownership of sled-migrator to www-data user and group
 RUN chown -cR www-data:www-data /srv/conduit
 
 # Set user to www-data
